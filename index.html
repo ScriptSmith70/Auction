@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,13 +34,15 @@
             gap: 30px;
         }
 
-        .player-section, .details-section, .team-section {
+        .player-section,
+        .details-section,
+        .team-section {
             background-color: #ffffff;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             padding: 20px;
             flex-grow: 1;
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .player-section {
@@ -54,11 +57,16 @@
             flex-basis: 30%;
         }
 
-        .player-section:hover, .details-section:hover, .team-section:hover {
-            transform: translateY(-10px) rotate(-3deg);
+        .player-section:hover,
+        .details-section:hover,
+        .team-section:hover {
+            transform: rotate(-3deg) translateX(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .player-section h2, .team-section h2, .details-section h2 {
+        .player-section h2,
+        .team-section h2,
+        .details-section h2 {
             color: #ff6f61;
             text-align: center;
             font-size: 1.8em;
@@ -78,7 +86,7 @@
         ul#playerList {
             list-style-type: none;
             padding-left: 0;
-            max-height: 400px;
+            max-height: 600px;
             overflow-y: auto;
         }
 
@@ -111,7 +119,9 @@
             color: #333;
         }
 
-        .details-section input, .details-section select, .details-section button {
+        .details-section input,
+        .details-section select,
+        .details-section button {
             width: 100%;
             padding: 12px;
             border-radius: 10px;
@@ -201,6 +211,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -210,7 +221,8 @@
     <main>
         <section class="player-section">
             <h2>🎯 Player List</h2>
-            <input type="text" id="searchBar" placeholder="Search players..." aria-label="Search players" onkeyup="filterPlayers()">
+            <input type="text" id="searchBar" placeholder="Search players..." aria-label="Search players"
+                onkeyup="filterPlayers()">
             <ul id="playerList"></ul>
         </section>
 
@@ -256,98 +268,99 @@
             "Gujrat Titans": { budget: 1000000000.0, players: [] },
             "Mumbai Indians": { budget: 1000000000.0, players: [] },
             "Sunrisers Hyderabad": { budget: 1000000000.0, players: [] },
-            
+
         };
-        const players =  [
-            {"name": "Virat Kohli", "team": null, "position": "Batsman", "starting_price": 20000000.0, "sold": false},
-    {"name": "Steve Smith", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
-    {"name": "Kane Williamson", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
-    {"name": "Joe Root", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Rohit Sharma", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
-    {"name": "David Warner", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
-    {"name": "Quinton de Kock", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false},
-    {"name": "Jos Buttler", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false},
-    {"name": "MS Dhoni", "team": null, "position": "Wicketkeeper", "starting_price": 20000000.0, "sold": false},
-    {"name": "Jasprit Bumrah", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
-    {"name": "Rashid Khan", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
-    {"name": "Kagiso Rabada", "team": null, "position": "Bowler", "starting_price": 20000000.0, "sold": false},
-    {"name": "Pat Cummins", "team": null, "position": "Bowler", "starting_price": 20000000.0, "sold": false},
-    {"name": "Trent Boult", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
-    {"name": "Andre Russell", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
-    {"name": "Hardik Pandya", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
-    {"name": "Ben Stokes", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
-    {"name": "Shakib Al Hasan", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
-    {"name": "KL Rahul", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
-    {"name": "Shikhar Dhawan", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
-    {"name": "Faf du Plessis", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Chris Gayle", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Sanju Samson", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false},
-    {"name": "Rishabh Pant", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false},
-    {"name": "Sunil Narine", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
-    {"name": "Ravindra Jadeja", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
-    {"name": "Mitchell Starc", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
-    {"name": "AB de Villiers", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
-    {"name": "Glenn Maxwell", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
-    {"name": "Kieron Pollard", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
-    {"name": "Suryakumar Yadav", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
-    {"name": "Ishan Kishan", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false},
-    {"name": "Mohammed Shami", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
-    {"name": "Yuzvendra Chahal", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
-    {"name": "Ravichandran Ashwin", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
-    {"name": "Marcus Stoinis", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
-    {"name": "Dwayne Bravo", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
-    {"name": "Aaron Finch", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Jason Roy", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Eoin Morgan", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
-    {"name": "Chris Lynn", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Liam Livingstone", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
-    {"name": "Sam Curran", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
-    {"name": "Imran Tahir", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
-    {"name": "Lockie Ferguson", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
-    {"name": "Navdeep Saini", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
-    {"name": "Shreyas Iyer", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
-    {"name": "Prithvi Shaw", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
-    {"name": "Devdutt Padikkal", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Shaun Marsh", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Aiden Markram", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Mitchell Marsh", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
-    {"name": "Kyle Jamieson", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
-    {"name": "Rachin Ravindra", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
-    {"name": "Rishabh Pant", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false},
-    {"name": "Ben Duckett", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false},
-    {"name": "Shubman Gill", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
-    {"name": "Rahul Tewatia", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
-    {"name": "Deepak Hooda", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
-    {"name": "Moeen Ali", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
-    {"name": "Chris Woakes", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
-    {"name": "David Willey", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
-    {"name": "Tom Curran", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
-    {"name": "Ravi Bishnoi", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
-    {"name": "Dinesh Karthik", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false},
-    {"name": "Kedar Jadhav", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
-    {"name": "Deepak Chahar", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
-    {"name": "Ruturaj Gaikwad", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
-    {"name": "Shimron Hetmyer", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
-    {"name": "Chris Morris", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
-    {"name": "Ishant Sharma", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
-    {"name": "James Neesham", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
-    {"name": "James Anderson", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
-    {"name": "Rassie van der Dussen", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
-    {"name": "Krunal Pandya", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
-    {"name": "Yuvraj Singh", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
-    {"name": "Suresh Raina", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Jofra Archer", "team": null, "position": "Bowler", "starting_price": 20000000.0, "sold": false},
-    {"name": "Lungi Ngidi", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
-    {"name": "Mohammad Nabi", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
-    {"name": "Shaheen Afridi", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
-    {"name": "Mohammad Amir", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
-    {"name": "Adil Rashid", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
-    {"name": "Odean Smith", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
-    {"name": "Avesh Khan", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
-    {"name": "Riyan Parag", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
-    {"name": "Rahul Tripathi", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
-    {"name": "Natarajan", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
-    {"name": "Tymal Mills", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false}, 
+        const players = [
+            { "name": "Virat Kohli", "team": null, "position": "Batsman", "starting_price": 20000000.0, "sold": false },
+            { "name": "Steve Smith", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false },
+            { "name": "Kane Williamson", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false },
+            { "name": "Joe Root", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Rohit Sharma", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false },
+            { "name": "David Warner", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false },
+            { "name": "Quinton de Kock", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false },
+            { "name": "Jos Buttler", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false },
+            { "name": "MS Dhoni", "team": null, "position": "Wicketkeeper", "starting_price": 20000000.0, "sold": false },
+            { "name": "Jasprit Bumrah", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false },
+            { "name": "Rashid Khan", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false },
+            { "name": "Kagiso Rabada", "team": null, "position": "Bowler", "starting_price": 20000000.0, "sold": false },
+            { "name": "Pat Cummins", "team": null, "position": "Bowler", "starting_price": 20000000.0, "sold": false },
+            { "name": "Trent Boult", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false },
+            { "name": "Andre Russell", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false },
+            { "name": "Hardik Pandya", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false },
+            { "name": "Ben Stokes", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false },
+            { "name": "Shakib Al Hasan", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false },
+            { "name": "KL Rahul", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false },
+            { "name": "Shikhar Dhawan", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false },
+            { "name": "Faf du Plessis", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Chris Gayle", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Sanju Samson", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false },
+            { "name": "Rishabh Pant", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false },
+            { "name": "Sunil Narine", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false },
+            { "name": "Ravindra Jadeja", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false },
+            { "name": "Mitchell Starc", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false },
+            { "name": "AB de Villiers", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false },
+            { "name": "Glenn Maxwell", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false },
+            { "name": "Kieron Pollard", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false },
+            { "name": "Suryakumar Yadav", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false },
+            { "name": "Ishan Kishan", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false },
+            { "name": "Mohammed Shami", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false },
+            { "name": "Yuzvendra Chahal", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false },
+            { "name": "Ravichandran Ashwin", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false },
+            { "name": "Marcus Stoinis", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false },
+            { "name": "Dwayne Bravo", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false },
+            { "name": "Aaron Finch", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Jason Roy", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Eoin Morgan", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false },
+            { "name": "Chris Lynn", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Liam Livingstone", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false },
+            { "name": "Sam Curran", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false },
+            { "name": "Imran Tahir", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false },
+            { "name": "Lockie Ferguson", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false },
+            { "name": "Navdeep Saini", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false },
+            { "name": "Shreyas Iyer", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false },
+            { "name": "Prithvi Shaw", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false },
+            { "name": "Devdutt Padikkal", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Shaun Marsh", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Aiden Markram", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Mitchell Marsh", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false },
+            { "name": "Kyle Jamieson", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false },
+            { "name": "Rachin Ravindra", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false },
+            { "name": "Rishabh Pant", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false },
+            { "name": "Ben Duckett", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false },
+            { "name": "Shubman Gill", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false },
+            { "name": "Rahul Tewatia", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false },
+            { "name": "Deepak Hooda", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false },
+            { "name": "Moeen Ali", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false },
+            { "name": "Chris Woakes", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false },
+            { "name": "David Willey", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false },
+            { "name": "Tom Curran", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false },
+            { "name": "Ravi Bishnoi", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false },
+            { "name": "Dinesh Karthik", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false },
+            { "name": "Kedar Jadhav", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false },
+            { "name": "Deepak Chahar", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false },
+            { "name": "Ruturaj Gaikwad", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false },
+            { "name": "Shimron Hetmyer", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false },
+            { "name": "Chris Morris", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false },
+            { "name": "Ishant Sharma", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false },
+            { "name": "James Neesham", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false },
+            { "name": "James Anderson", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false },
+            { "name": "Rassie van der Dussen", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false },
+            { "name": "Krunal Pandya", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false },
+            { "name": "Yuvraj Singh", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false },
+            { "name": "Suresh Raina", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Jofra Archer", "team": null, "position": "Bowler", "starting_price": 20000000.0, "sold": false },
+            { "name": "Lungi Ngidi", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false },
+            { "name": "Mohammad Nabi", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false },
+            { "name": "Shaheen Afridi", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false },
+            { "name": "Hasan Ali", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false },
+            { "name": "Mohammad Amir", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false },
+            { "name": "Adil Rashid", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false },
+            { "name": "Odean Smith", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false },
+            { "name": "Avesh Khan", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false },
+            { "name": "Riyan Parag", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false },
+            { "name": "Rahul Tripathi", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false },
+            { "name": "Natarajan", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false },
+            { "name": "Tymal Mills", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false },
         ];
 
         let selectedPlayer = null;
@@ -361,17 +374,17 @@
         const totalDuration = 300; // in seconds
 
         window.onload = function () {
-            updatePlayerList();
+            updatePlayerList(players);
             updateTeamDetails();
             populateTeams();
             updateTimerDisplay();
         };
 
-        function updatePlayerList() {
+        function updatePlayerList(playerArray) {
             const playerList = document.getElementById("playerList");
             const fragment = document.createDocumentFragment();
             playerList.innerHTML = "";
-            players.forEach((player, index) => {
+            playerArray.forEach((player, index) => {
                 const listItem = document.createElement("li");
                 listItem.textContent = `${index + 1}. ${player.name} (${player.position}) - ${player.starting_price / 10000000} crores${player.sold ? " (Sold)" : ""}`;
                 if (player.sold) listItem.classList.add("sold");
@@ -453,7 +466,7 @@
                         selectedPlayer.team = teamName;
                         selectedPlayer.sold = true;
                         selectedPlayer.sold_price = bidAmount;
-                        updatePlayerList();
+                        updatePlayerList(players); // Update full list to reflect the sold player
                         updateTeamDetails();
                         alert(`Player ${selectedPlayer.name} sold to ${teamName} for ${bidAmount / 10000000} crores!`);
                     } else {
@@ -549,7 +562,7 @@
             const startingPrice = parseFloat(prompt("Enter starting price (in crores):")) * 10000000;
             if (playerName && playerPosition && startingPrice > 0) {
                 players.push({ name: playerName, team: null, position: playerPosition, starting_price: startingPrice, sold: false });
-                updatePlayerList();
+                updatePlayerList(players);
             } else {
                 alert("Please fill all fields correctly.");
             }
@@ -566,4 +579,5 @@
         }
     </script>
 </body>
+
 </html>
