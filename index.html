@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cricket Player Auction</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to right, #ffe259, #ffa751);
+            color: #333;
+        }
+
+        header {
+            background-color: #ff6f61;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 3px 3px #ffcccb;
+            border-bottom: 5px solid #ffcccb;
+            transform: skewY(-3deg);
+            margin-bottom: 40px;
+        }
+
+        main {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: auto;
+            gap: 30px;
+        }
+
+        .player-section, .details-section, .team-section {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            flex-grow: 1;
+            transition: transform 0.3s;
+        }
+
+        .player-section {
+            flex-basis: 30%;
+        }
+
+        .details-section {
+            flex-basis: 40%;
+        }
+
+        .team-section {
+            flex-basis: 30%;
+        }
+
+        .player-section:hover, .details-section:hover, .team-section:hover {
+            transform: translateY(-10px) rotate(-3deg);
+        }
+
+        .player-section h2, .team-section h2, .details-section h2 {
+            color: #ff6f61;
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .player-section input {
+            margin-bottom: 20px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ff6f61;
+            font-size: 1.2em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        ul#playerList {
+            list-style-type: none;
+            padding-left: 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        ul#playerList li {
+            background-color: #ffcccb;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        ul#playerList li:hover {
+            background-color: #ff6f61;
+            transform: scale(1.05) rotate(3deg);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        ul#playerList li.sold {
+            background-color: #ffd700;
+        }
+
+        .details-section label {
+            display: block;
+            margin: 15px 0 5px;
+            color: #333;
+        }
+
+        .details-section input, .details-section select, .details-section button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #ff6f61;
+            font-size: 1.2em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .details-section button {
+            background-color: #ff6f61;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .details-section button:hover {
+            background-color: #ffcccb;
+            transform: rotate(-3deg);
+        }
+
+        .team-section {
+            background-color: #ffcccb;
+            margin-top: -40px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-section h2 {
+            color: #ff6f61;
+        }
+
+        .team-section p {
+            margin: 10px 0;
+        }
+
+        .timer-section {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+            flex-grow: 1;
+            align-self: flex-end;
+            position: relative;
+        }
+
+        .timer-section button {
+            background-color: #ffcccb;
+            color: #333;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #ff6f61;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .timer-section button:hover {
+            background-color: #ff6f61;
+            color: white;
+            transform: rotate(3deg);
+        }
+
+        /* Circular Progress Bar */
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#ff6f61 0% 0%, transparent 0% 100%);
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        Cricket Player Auction
+    </header>
+
+    <main>
+        <section class="player-section">
+            <h2>🎯 Player List</h2>
+            <input type="text" id="searchBar" placeholder="Search players..." aria-label="Search players" onkeyup="filterPlayers()">
+            <ul id="playerList"></ul>
+        </section>
+
+        <section class="details-section">
+            <h2>⚾ Player Details</h2>
+            <div id="playerDetails"></div>
+
+            <label for="bidAmount">Enter Bid Amount (in crores):</label>
+            <input type="number" id="bidAmount" min="0.1" step="0.1">
+
+            <label for="teamSelect">Select Team:</label>
+            <select id="teamSelect"></select>
+
+            <button onclick="placeBid()">💰 Place Bid</button>
+            <button onclick="sellPlayer()">🔨 Sell Player</button>
+            <button onclick="stopBidding()">⏹️ Stop Bidding</button>
+            <button onclick="showAddPlayerForm()">➕ Add Player</button>
+        </section>
+
+        <section class="team-section">
+            <h2>🏆 Team Details</h2>
+            <div id="teamDetails"></div>
+        </section>
+    </main>
+
+    <section class="timer-section">
+        <p id="timerLabel">⏳ Auction Countdown Timer: 05:00</p>
+        <div id="progressCircle" class="progress-circle"></div>
+        <button onclick="startAuction()">🎉 Start Auction</button>
+        <button onclick="pauseAuction()">⏸️ Pause Auction</button>
+        <button onclick="resetAuction()">🔄 Reset Auction</button>
+    </section>
+
+    <script>
+        const teams = {
+            "Chennai Super Kings": { budget: 1000000000.0, players: [] },
+            "Delhi Capitals": { budget: 1000000000.0, players: [] },
+            "Kolkata Knight Riders": { budget: 1000000000.0, players: [] },
+            "Punjab Kings": { budget: 1000000000.0, players: [] },
+            "Rajasthan Royals": { budget: 1000000000.0, players: [] },
+            "Lucknow Super Giants": { budget: 1000000000.0, players: [] },
+            "Royal Challengers Bengaluru": { budget: 1000000000.0, players: [] },
+            "Gujrat Titans": { budget: 1000000000.0, players: [] },
+            "Mumbai Indians": { budget: 1000000000.0, players: [] },
+            "Sunrisers Hyderabad": { budget: 1000000000.0, players: [] },
+            
+        };
+        const players =  [
+            {"name": "Virat Kohli", "team": null, "position": "Batsman", "starting_price": 20000000.0, "sold": false},
+    {"name": "Steve Smith", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
+    {"name": "Kane Williamson", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
+    {"name": "Joe Root", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Rohit Sharma", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
+    {"name": "David Warner", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
+    {"name": "Quinton de Kock", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false},
+    {"name": "Jos Buttler", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false},
+    {"name": "MS Dhoni", "team": null, "position": "Wicketkeeper", "starting_price": 20000000.0, "sold": false},
+    {"name": "Jasprit Bumrah", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
+    {"name": "Rashid Khan", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
+    {"name": "Kagiso Rabada", "team": null, "position": "Bowler", "starting_price": 20000000.0, "sold": false},
+    {"name": "Pat Cummins", "team": null, "position": "Bowler", "starting_price": 20000000.0, "sold": false},
+    {"name": "Trent Boult", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
+    {"name": "Andre Russell", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
+    {"name": "Hardik Pandya", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
+    {"name": "Ben Stokes", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
+    {"name": "Shakib Al Hasan", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
+    {"name": "KL Rahul", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
+    {"name": "Shikhar Dhawan", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
+    {"name": "Faf du Plessis", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Chris Gayle", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Sanju Samson", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false},
+    {"name": "Rishabh Pant", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false},
+    {"name": "Sunil Narine", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
+    {"name": "Ravindra Jadeja", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
+    {"name": "Mitchell Starc", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
+    {"name": "AB de Villiers", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
+    {"name": "Glenn Maxwell", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
+    {"name": "Kieron Pollard", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
+    {"name": "Suryakumar Yadav", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
+    {"name": "Ishan Kishan", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false},
+    {"name": "Mohammed Shami", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
+    {"name": "Yuzvendra Chahal", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
+    {"name": "Ravichandran Ashwin", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
+    {"name": "Marcus Stoinis", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
+    {"name": "Dwayne Bravo", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
+    {"name": "Aaron Finch", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Jason Roy", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Eoin Morgan", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
+    {"name": "Chris Lynn", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Liam Livingstone", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
+    {"name": "Sam Curran", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
+    {"name": "Imran Tahir", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
+    {"name": "Lockie Ferguson", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
+    {"name": "Navdeep Saini", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
+    {"name": "Shreyas Iyer", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
+    {"name": "Prithvi Shaw", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
+    {"name": "Devdutt Padikkal", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Shaun Marsh", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Aiden Markram", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Mitchell Marsh", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
+    {"name": "Kyle Jamieson", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
+    {"name": "Rachin Ravindra", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
+    {"name": "Rishabh Pant", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false},
+    {"name": "Ben Duckett", "team": null, "position": "Wicketkeeper", "starting_price": 12500000.0, "sold": false},
+    {"name": "Shubman Gill", "team": null, "position": "Batsman", "starting_price": 17500000.0, "sold": false},
+    {"name": "Rahul Tewatia", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
+    {"name": "Deepak Hooda", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
+    {"name": "Moeen Ali", "team": null, "position": "All-Rounder", "starting_price": 20000000.0, "sold": false},
+    {"name": "Chris Woakes", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
+    {"name": "David Willey", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
+    {"name": "Tom Curran", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
+    {"name": "Ravi Bishnoi", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
+    {"name": "Dinesh Karthik", "team": null, "position": "Wicketkeeper", "starting_price": 15000000.0, "sold": false},
+    {"name": "Kedar Jadhav", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
+    {"name": "Deepak Chahar", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
+    {"name": "Ruturaj Gaikwad", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
+    {"name": "Shimron Hetmyer", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
+    {"name": "Chris Morris", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
+    {"name": "Ishant Sharma", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
+    {"name": "James Neesham", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
+    {"name": "James Anderson", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
+    {"name": "Rassie van der Dussen", "team": null, "position": "Batsman", "starting_price": 15000000.0, "sold": false},
+    {"name": "Krunal Pandya", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
+    {"name": "Yuvraj Singh", "team": null, "position": "All-Rounder", "starting_price": 17500000.0, "sold": false},
+    {"name": "Suresh Raina", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Jofra Archer", "team": null, "position": "Bowler", "starting_price": 20000000.0, "sold": false},
+    {"name": "Lungi Ngidi", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
+    {"name": "Mohammad Nabi", "team": null, "position": "All-Rounder", "starting_price": 15000000.0, "sold": false},
+    {"name": "Shaheen Afridi", "team": null, "position": "Bowler", "starting_price": 17500000.0, "sold": false},
+    {"name": "Hasan Ali", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
+    {"name": "Mohammad Amir", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
+    {"name": "Adil Rashid", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
+    {"name": "Odean Smith", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
+    {"name": "Avesh Khan", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false},
+    {"name": "Riyan Parag", "team": null, "position": "All-Rounder", "starting_price": 12500000.0, "sold": false},
+    {"name": "Rahul Tripathi", "team": null, "position": "Batsman", "starting_price": 12500000.0, "sold": false},
+    {"name": "Natarajan", "team": null, "position": "Bowler", "starting_price": 12500000.0, "sold": false},
+    {"name": "Tymal Mills", "team": null, "position": "Bowler", "starting_price": 15000000.0, "sold": false}, 
+        ];
+
+        let selectedPlayer = null;
+        let currentBid = 0.0;
+        let biddingInProgress = false;
+        let timer;
+        let timeRemaining = 300; // 5 minutes
+        let auctionActive = false;
+        const timerLabel = document.getElementById("timerLabel");
+        const progressCircle = document.getElementById("progressCircle");
+        const totalDuration = 300; // in seconds
+
+        window.onload = function () {
+            updatePlayerList();
+            updateTeamDetails();
+            populateTeams();
+            updateTimerDisplay();
+        };
+
+        function updatePlayerList() {
+            const playerList = document.getElementById("playerList");
+            const fragment = document.createDocumentFragment();
+            playerList.innerHTML = "";
+            players.forEach((player, index) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${index + 1}. ${player.name} (${player.position}) - ${player.starting_price / 10000000} crores${player.sold ? " (Sold)" : ""}`;
+                if (player.sold) listItem.classList.add("sold");
+                listItem.onclick = () => onPlayerSelect(player);
+                fragment.appendChild(listItem);
+            });
+            playerList.appendChild(fragment);
+        }
+
+        function updateTeamDetails() {
+            const teamDetails = document.getElementById("teamDetails");
+            const fragment = document.createDocumentFragment();
+            teamDetails.innerHTML = "";
+            for (let teamName in teams) {
+                const team = teams[teamName];
+                const teamInfo = document.createElement("div");
+                teamInfo.innerHTML = `
+                    <p><strong>Team:</strong> ${teamName}</p>
+                    <p><strong>Budget:</strong> ${team.budget / 10000000} crores</p>
+                    <p><strong>Players:</strong></p>`;
+                if (team.players.length > 0) {
+                    team.players.forEach(player => {
+                        teamInfo.innerHTML += `<p>- ${player.name} (${player.position}) - Sold for ${player.sold_price / 10000000} crores</p>`;
+                    });
+                } else {
+                    teamInfo.innerHTML += "<p>- No players purchased</p>";
+                }
+                teamInfo.innerHTML += "<hr>";
+                fragment.appendChild(teamInfo);
+            }
+            teamDetails.appendChild(fragment);
+        }
+
+        function onPlayerSelect(player) {
+            selectedPlayer = player;
+            const playerDetails = document.getElementById("playerDetails");
+            playerDetails.innerHTML = `
+                <p><strong>Name:</strong> ${player.name}</p>
+                <p><strong>Position:</strong> ${player.position}</p>
+                <p><strong>Starting Price:</strong> ${player.starting_price / 10000000} crores</p>`;
+            currentBid = player.starting_price;
+            document.getElementById("bidAmount").value = currentBid / 10000000;
+            if (player.sold) {
+                document.querySelector(".details-section button").disabled = true;
+            } else {
+                document.querySelector(".details-section button").disabled = false;
+            }
+        }
+
+        function placeBid() {
+            if (selectedPlayer && !selectedPlayer.sold) {
+                const bidAmount = parseFloat(document.getElementById("bidAmount").value) * 10000000;
+                const teamSelect = document.getElementById("teamSelect");
+                const teamName = teamSelect.value;
+                const team = teams[teamName];
+                if (team && bidAmount <= team.budget) {
+                    if (bidAmount >= selectedPlayer.starting_price && (bidAmount > currentBid || currentBid === selectedPlayer.starting_price)) {
+                        currentBid = bidAmount;
+                        alert(`Bid of ${currentBid / 10000000} crores placed successfully!`);
+                    } else {
+                        alert("Bid amount must be higher than the current bid.");
+                    }
+                } else {
+                    alert("The selected team does not have enough budget for this bid.");
+                }
+            }
+        }
+
+        function sellPlayer() {
+            if (selectedPlayer && !selectedPlayer.sold) {
+                const bidAmount = parseFloat(document.getElementById("bidAmount").value) * 10000000;
+                const teamSelect = document.getElementById("teamSelect");
+                const teamName = teamSelect.value;
+                const team = teams[teamName];
+                if (bidAmount >= selectedPlayer.starting_price) {
+                    if (team && team.budget >= bidAmount) {
+                        team.players.push({ name: selectedPlayer.name, position: selectedPlayer.position, sold_price: bidAmount });
+                        team.budget -= bidAmount;
+                        selectedPlayer.team = teamName;
+                        selectedPlayer.sold = true;
+                        selectedPlayer.sold_price = bidAmount;
+                        updatePlayerList();
+                        updateTeamDetails();
+                        alert(`Player ${selectedPlayer.name} sold to ${teamName} for ${bidAmount / 10000000} crores!`);
+                    } else {
+                        alert("Selected team does not have enough budget.");
+                    }
+                } else {
+                    alert("Bid amount must be equal to or higher than the starting price.");
+                }
+            }
+        }
+
+        function stopBidding() {
+            biddingInProgress = false;
+            clearTimeout(timer);
+            alert("Bidding has been stopped.");
+        }
+
+        function startAuction() {
+            if (!auctionActive) {
+                auctionActive = true;
+                timer = setInterval(() => {
+                    if (timeRemaining > 0) {
+                        timeRemaining--;
+                        updateTimerDisplay();
+                        if (timeRemaining === 60 || timeRemaining === 20) {
+                            playAlertSound();
+                        }
+                    } else {
+                        clearInterval(timer);
+                        auctionActive = false;
+                        playEndSound();
+                        alert("Auction time is up!");
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseAuction() {
+            clearInterval(timer);
+            auctionActive = false;
+        }
+
+        function resetAuction() {
+            clearInterval(timer);
+            auctionActive = false;
+            timeRemaining = totalDuration;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            timerLabel.textContent = `⏳ Auction Countdown Timer: ${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+            // Update the circular progress bar
+            const percentage = (timeRemaining / totalDuration) * 100;
+            progressCircle.style.background = `conic-gradient(#ff6f61 0% ${percentage}%, transparent ${percentage}% 100%)`;
+
+            // Change timer color based on time remaining
+            if (timeRemaining <= 60) {
+                timerLabel.style.backgroundColor = '#ffcc00'; // Yellow
+                if (timeRemaining <= 20) {
+                    timerLabel.style.backgroundColor = '#ff6f61'; // Red
+                    timerLabel.style.color = '#ffffff';
+                    if (timeRemaining % 2 === 0) {
+                        timerLabel.style.color = '#ffcccb';
+                    }
+                }
+            } else {
+                timerLabel.style.backgroundColor = '#28a745'; // Green
+            }
+        }
+
+        function playAlertSound() {
+            const alertSound = new Audio('https://www.soundjay.com/button/sounds/beep-07.mp3');
+            alertSound.play();
+        }
+
+        function playEndSound() {
+            const endSound = new Audio('https://www.soundjay.com/button/sounds/beep-09.mp3');
+            endSound.play();
+        }
+
+        function filterPlayers() {
+            const searchTerm = document.getElementById("searchBar").value.toLowerCase();
+            const filteredPlayers = players.filter(player => player.name.toLowerCase().includes(searchTerm));
+            updatePlayerList(filteredPlayers);
+        }
+
+        function showAddPlayerForm() {
+            const playerName = prompt("Enter player name:");
+            const playerPosition = prompt("Enter player position:");
+            const startingPrice = parseFloat(prompt("Enter starting price (in crores):")) * 10000000;
+            if (playerName && playerPosition && startingPrice > 0) {
+                players.push({ name: playerName, team: null, position: playerPosition, starting_price: startingPrice, sold: false });
+                updatePlayerList();
+            } else {
+                alert("Please fill all fields correctly.");
+            }
+        }
+
+        function populateTeams() {
+            const teamSelect = document.getElementById("teamSelect");
+            for (let teamName in teams) {
+                const option = document.createElement("option");
+                option.value = teamName;
+                option.textContent = teamName;
+                teamSelect.appendChild(option);
+            }
+        }
+    </script>
+</body>
+</html>
