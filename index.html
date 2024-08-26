@@ -22,7 +22,6 @@
             font-weight: bold;
             text-shadow: 3px 3px #ffcccb;
             border-bottom: 5px solid #ffcccb;
-            transform: skewY(-3deg);
             margin-bottom: 40px;
         }
 
@@ -42,7 +41,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             padding: 20px;
             flex-grow: 1;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: box-shadow 0.3s;
         }
 
         .player-section {
@@ -60,7 +59,6 @@
         .player-section:hover,
         .details-section:hover,
         .team-section:hover {
-            transform: rotate(-3deg) translateX(-10px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
@@ -105,7 +103,7 @@
 
         ul#playerList li:hover {
             background-color: #ff6f61;
-            transform: scale(1.05) rotate(3deg);
+            transform: scale(1.05);
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
@@ -141,7 +139,6 @@
 
         .details-section button:hover {
             background-color: #ffcccb;
-            transform: rotate(-3deg);
         }
 
         .team-section {
@@ -191,7 +188,6 @@
         .timer-section button:hover {
             background-color: #ff6f61;
             color: white;
-            transform: rotate(3deg);
         }
 
         /* Circular Progress Bar */
